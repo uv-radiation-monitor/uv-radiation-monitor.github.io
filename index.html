@@ -10,7 +10,6 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1220;--card:#131c2e;--tx:#e8eefc;--mut:#94a3b8;--bd:#223049;--ac:#60a5fa}}
 :root[data-theme="dark"]{--bg:#0b1220;--card:#131c2e;--tx:#e8eefc;--mut:#94a3b8;--bd:#223049;--ac:#60a5fa}
 *{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--tx);font-family:Cairo,Tahoma,Arial,sans-serif;line-height:1.5}
 .wrap{max-width:720px;margin:0 auto;padding:16px}
 header{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
@@ -19,25 +18,23 @@ h1 small{display:block;font-size:.75rem;color:var(--mut);font-weight:400}
 .btns{display:flex;gap:6px}
 button{font:inherit;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:10px;padding:6px 12px;cursor:pointer}
 .status{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 12px;font-size:.85rem;margin-bottom:12px}
-.dot{width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(22,163,74,.2)}
+.dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--mut)}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:16px;margin-bottom:12px}
-.hero{text-align:center;border-width:2px;border-color:var(--lv,var(--ok))}
+.hero{text-align:center;border-width:2px;border-color:var(--lv,var(--mut))}
 .gauge{width:100%;max-width:300px;margin:0 auto;display:block}
-.val{font-size:3rem;font-weight:800;line-height:1;color:var(--lv,var(--ok))}
-.lvl{display:inline-block;margin-top:6px;padding:4px 16px;border-radius:99px;background:var(--lv,var(--ok));color:#fff;font-weight:600}
+.val{font-size:3rem;font-weight:800;line-height:1;color:var(--lv,var(--mut))}
+.lvl{display:inline-block;margin-top:6px;padding:4px 16px;border-radius:99px;background:var(--lv,var(--mut));color:#fff;font-weight:600}
 .msg{margin:10px 0 0;color:var(--mut);font-size:.9rem}
 .alarm{animation:p 1s infinite}
 @keyframes p{50%{box-shadow:0 0 0 8px rgba(220,38,38,.25)}}
 .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
 .m{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:12px 6px;text-align:center}
-.m .i{font-size:1.4rem}.m b{display:block;font-size:1.25rem}.m span{font-size:.75rem;color:var(--mut)}
+.m .i{font-size:1.4rem}.m b{display:block;font-size:1.2rem;direction:ltr;unicode-bidi:isolate}.m span{font-size:.75rem;color:var(--mut)}
 h2{font-size:.95rem;margin:0 0 8px}
 .spark{width:100%;height:80px}
 .leg{display:flex;flex-direction:column;gap:6px;font-size:.85rem}
 .leg div{display:flex;align-items:center;gap:8px}
 .leg i{width:14px;height:14px;border-radius:4px;flex:none}
-.demo{display:flex;align-items:center;gap:10px;font-size:.8rem;color:var(--mut)}
-.demo input{flex:1}
 footer{text-align:center;color:var(--mut);font-size:.75rem;padding:8px 0 16px}
 </style>
 </head>
@@ -48,14 +45,14 @@ footer{text-align:center;color:var(--mut);font-size:.75rem;padding:8px 0 16px}
 <div class="btns"><button id="lang">EN</button><button id="th">◐</button></div>
 </header>
 
-<div class="status"><span class="dot"></span><span id="upd">—</span></div>
+<div class="status"><span class="dot" id="dot"></span><span id="upd">—</span></div>
 
 <div class="card hero" id="hero">
 <svg class="gauge" viewBox="0 0 200 115" aria-hidden="true">
 <path d="M10 100A90 90 0 0 1 190 100" fill="none" stroke="var(--bd)" stroke-width="14" stroke-linecap="round"/>
-<path id="arc" d="M10 100A90 90 0 0 1 190 100" fill="none" stroke="var(--lv,var(--ok))" stroke-width="14" stroke-linecap="round" stroke-dasharray="282.7" stroke-dashoffset="282.7"/>
+<path id="arc" d="M10 100A90 90 0 0 1 190 100" fill="none" stroke="var(--lv,var(--mut))" stroke-width="14" stroke-linecap="round" stroke-dasharray="282.7" stroke-dashoffset="282.7"/>
 </svg>
-<div class="val" id="uv">0.0</div>
+<div class="val" id="uv">--</div>
 <div class="lvl" id="lvl">—</div>
 <p class="msg" id="msg">—</p>
 </div>
@@ -72,47 +69,62 @@ footer{text-align:center;color:var(--mut);font-size:.75rem;padding:8px 0 16px}
 
 <div class="card"><h2 id="hl">—</h2><div class="leg" id="leg"></div></div>
 
-<div class="card"><div class="demo"><span id="dm">—</span><input type="range" id="sl" min="0" max="11" step="0.1" value="2.4"></div></div>
-
 <footer id="ft">—</footer>
 </div>
 
 <script>
+var DB="https://ultraviolet-rays-default-rtdb.firebaseio.com";
 var T={
-ar:{t:"مراقب الأشعة فوق البنفسجية",st:"قياس مباشر للأشعة والحرارة والرطوبة والضغط",upd:"آخر تحديث: قبل دقيقتين",lt:"الحرارة",lh:"الرطوبة",lp:"الضغط",hh:"سجل الأشعة (آخر القراءات)",hl:"مستويات التنبيه",dm:"تجربة القيمة:",ft:"بيانات تجريبية • مشروع تخرج",
+ar:{t:"مراقب الأشعة فوق البنفسجية",st:"قياس مباشر للأشعة والحرارة والرطوبة والضغط",lt:"الحرارة",lh:"الرطوبة",lp:"الضغط",hh:"سجل الأشعة (آخر القراءات)",hl:"مستويات التنبيه",ft:"مشروع تخرج",
+wait:"بانتظار أول قراءة من الجهاز",err:"تعذر الاتصال بالسيرفر",on:"الجهاز متصل",off:"الجهاز غير متصل، هذه آخر قراءة",
 lv:["آمن","تنبيه","إنذار"],
 ms:["الأشعة منخفضة، لا حاجة لأي حماية.","استخدم واقي الشمس وغطِّ جسمك!","خطر! ابتعد عن الشمس فوراً."],
-lg:["أقل من 3: آمن","من 3 إلى 5: تنبيه (تحذير على الشاشة + صافرة أولى)","5 فأكثر: إنذار (صافرتان)"]},
-en:{t:"UV Radiation Monitor",st:"Live UV, temperature, humidity and pressure",upd:"Last update: 2 minutes ago",lt:"Temp",lh:"Humidity",lp:"Pressure",hh:"UV history (latest readings)",hl:"Alert levels",dm:"Try a value:",ft:"Demo data • Graduation project",
+lg:["أقل من 3: آمن","من 3 إلى 5: تنبيه (تحذير على الشاشة + صافرة)","5 فأكثر: إنذار (صافرة متكررة)"],
+w:"بانتظار البيانات",
+ago:function(s){var m=Math.floor(s/60);return s<60?"قبل لحظات":m<60?"قبل "+m+" دقيقة":m<1440?"قبل "+Math.floor(m/60)+" ساعة":"قبل "+Math.floor(m/1440)+" يوم"}},
+en:{t:"UV Radiation Monitor",st:"Live UV, temperature, humidity and pressure",lt:"Temp",lh:"Humidity",lp:"Pressure",hh:"UV history (latest readings)",hl:"Alert levels",ft:"Graduation project",
+wait:"Waiting for the first reading from the device",err:"Cannot reach the server",on:"Device online",off:"Device offline, showing last reading",
 lv:["Safe","Warning","ALARM"],
 ms:["UV is low, no protection needed.","Cover up and use sunscreen!","Danger! Get out of the sun now."],
-lg:["Below 3: Safe","3 to 5: Warning (screen alert + first buzzer)","5 and above: Alarm (both buzzers)"]}};
-var L="ar",uv=2.4,h=[1.8,2,2.2,2.1,2.6,3.1,3.4,3.2,2.9,2.5,2.4,2.4],C=["--ok","--warn","--bad"];
+lg:["Below 3: Safe","3 to 5: Warning (screen alert + buzzer)","5 and above: Alarm (repeating buzzer)"],
+w:"Waiting for data",
+ago:function(s){var m=Math.floor(s/60);return s<60?"just now":m<60?m+" min ago":m<1440?Math.floor(m/60)+" h ago":Math.floor(m/1440)+" d ago"}}};
+var L="ar",d=null,h=[],bad=false,C=["--ok","--warn","--bad"];
 function $(i){return document.getElementById(i)}
 function lv(v){return v>=5?2:v>=3?1:0}
 function draw(){
-var s=T[L],k=lv(uv),r=document.documentElement;
-document.documentElement.lang=L;r.dir=L=="ar"?"rtl":"ltr";
+var s=T[L],r=document.documentElement;
+r.lang=L;r.dir=L=="ar"?"rtl":"ltr";
 $("lang").textContent=L=="ar"?"EN":"ع";
-["upd","lt","lh","lp","hh","hl","dm","ft"].forEach(function(i){$(i).textContent=s[i]});
+["lt","lh","lp","hh","hl","ft"].forEach(function(i){$(i).textContent=s[i]});
 $("t").childNodes[0].nodeValue=s.t;$("st").textContent=s.st;
-$("lvl").textContent=s.lv[k];$("msg").textContent=s.ms[k];
-$("uv").textContent=uv.toFixed(1);
-$("hero").style.setProperty("--lv","var("+C[k]+")");
-$("hero").className="card hero"+(k==2?" alarm":"");
-$("arc").style.strokeDashoffset=282.7*(1-Math.min(uv,11)/11);
+var has=!!d&&typeof d.uv=="number",k=has?lv(d.uv):-1;
+var on=has&&d.ts&&(Date.now()-d.ts)<300000;
+$("hero").style.setProperty("--lv","var("+(k<0?"--mut":C[k])+")");
+$("hero").className="card hero"+(k==2&&on?" alarm":"");
+$("uv").textContent=has?d.uv.toFixed(1):"--";
+$("lvl").textContent=k<0?s.w:s.lv[k];
+$("msg").textContent=k<0?"":s.ms[k];
+$("arc").style.strokeDashoffset=has?282.7*(1-Math.min(d.uv,11)/11):282.7;
+$("tp").textContent=has&&d.temp!=null?Number(d.temp).toFixed(1)+"°C":"—";
+$("hu").textContent=has&&d.hum!=null?Math.round(d.hum)+"%":"—";
+$("pr").textContent=has&&d.press!=null?Math.round(d.press)+" hPa":"—";
+var txt=bad?s.err:!has?s.wait:(on?s.on:s.off)+(d.ts?" • "+s.ago((Date.now()-d.ts)/1000):"");
+$("upd").textContent=txt;
+$("dot").style.background=on?"var(--ok)":"var(--mut)";
 $("leg").innerHTML=s.lg.map(function(x,i){return '<div><i style="background:var('+C[i]+')"></i>'+x+'</div>'}).join("");
-$("sp").setAttribute("points",h.map(function(v,i){return (i*200/(h.length-1)).toFixed(1)+","+(60-Math.min(v,11)/11*55).toFixed(1)}).join(" "));
+var a=h.length?h:(has?[d.uv,d.uv]:[]);
+if(a.length==1)a=[a[0],a[0]];
+$("sp").setAttribute("points",a.map(function(v,i){return (i*200/(a.length-1)).toFixed(1)+","+(60-Math.min(v,11)/11*55).toFixed(1)}).join(" "));
 }
-function tick(){
-$("tp").textContent=(31+Math.random()*2).toFixed(1)+"°C";
-$("hu").textContent=Math.round(28+Math.random()*4)+"%";
-$("pr").textContent=Math.round(1002+Math.random()*3)+" hPa";
+function load(){
+fetch(DB+"/uv.json",{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){d=j;bad=false;
+return fetch(DB+"/history.json?orderBy="+encodeURIComponent('"$key"')+"&limitToLast=20",{cache:"no-store"})}).then(function(r){return r.json()}).then(function(o){
+h=o?Object.keys(o).sort().map(function(k){return o[k].uv}):[];draw()}).catch(function(){bad=true;draw()});
 }
-$("sl").oninput=function(){uv=parseFloat(this.value);h.push(uv);h.shift();draw()};
 $("lang").onclick=function(){L=L=="ar"?"en":"ar";draw()};
-$("th").onclick=function(){var r=document.documentElement,d=r.getAttribute("data-theme");r.setAttribute("data-theme",d=="dark"?"light":"dark")};
-tick();draw();setInterval(tick,4000);
+$("th").onclick=function(){var r=document.documentElement;r.setAttribute("data-theme",r.getAttribute("data-theme")=="dark"?"light":"dark")};
+draw();load();setInterval(load,5000);
 </script>
 </body>
-  </html>
+</html>

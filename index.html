@@ -6,11 +6,11 @@
 <title>UV Monitor | قياس الأشعة فوق البنفسجية</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0d0a1f;--card:#17122e;--bd:#2a2250;--tx:#ece9fb;--mut:#9a93c4;--ac:#8b5cf6;--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444}
-:root[data-theme=light]{--bg:#f5f3ff;--card:#fff;--bd:#e4defa;--tx:#1e1b4b;--mut:#6b6590;--ac:#7c3aed}
+:root{--bg:#f4f6fb;--card:#fff;--bd:#e3e8f2;--tx:#1f2a44;--mut:#6b7a99;--ac:#4e73df;--ok:#1cc88a;--warn:#f6c23e;--bad:#e74a3b;--sh:0 2px 10px rgba(31,42,68,.07)}
+:root[data-theme=dark]{--bg:#0f1626;--card:#182138;--bd:#263252;--tx:#e8eefc;--mut:#93a0bf;--ac:#6f90f0;--sh:none}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--tx);font-family:Cairo,Tahoma,Arial,sans-serif;line-height:1.5;padding-bottom:env(safe-area-inset-bottom,0px)}
-.top{background:linear-gradient(135deg,#2e1065,#5b21b6);color:#fff;padding:calc(12px + env(safe-area-inset-top,0px)) 12px 12px}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:Cairo,Tahoma,Arial,sans-serif;line-height:1.55;padding-bottom:env(safe-area-inset-bottom,0px)}
+.top{background:linear-gradient(135deg,#1e2a5a,#4e73df);color:#fff;padding:calc(12px + env(safe-area-inset-top,0px)) 12px 12px}
 .org{max-width:720px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px}
 .org img{width:62px;height:62px;object-fit:contain;background:#fff;border-radius:14px;padding:3px;flex:none}
 .org div{text-align:center;font-size:.74rem;line-height:1.6;font-weight:600}
@@ -20,10 +20,16 @@ body{margin:0;background:var(--bg);color:var(--tx);font-family:Cairo,Tahoma,Aria
 h1{font-size:1.2rem;margin:0;font-weight:800}
 h1 small{display:block;font-size:.74rem;color:var(--mut);font-weight:400}
 .btns{display:flex;gap:6px}
-button{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:6px 12px;cursor:pointer}
-.st{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 12px;font-size:.85rem;margin-bottom:12px}
+.btns button{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:6px 12px;cursor:pointer}
+.tabs{display:flex;gap:6px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:4px;margin-bottom:12px;box-shadow:var(--sh)}
+.tabs button{flex:1;border:0;background:none;color:var(--mut);font:inherit;font-weight:700;border-radius:10px;padding:8px;cursor:pointer}
+.tabs button.on{background:var(--ac);color:#fff}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:var(--sh)}
+.ib{border-inline-start:5px solid var(--sc,var(--ac))}
+h2{font-size:.95rem;margin:0 0 8px;color:var(--ac)}
+.st{display:flex;align-items:center;gap:8px;font-size:.85rem;padding:10px 14px}
 .dot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--mut)}
-.hero{background:var(--card);border:2px solid var(--lv,var(--bd));border-radius:26px;padding:18px 12px;text-align:center;margin-bottom:12px}
+.hero{text-align:center;border:2px solid var(--lv,var(--bd))}
 .ring{position:relative;width:220px;height:220px;margin:0 auto}
 .ring svg{width:100%;height:100%;transform:rotate(-90deg)}
 .ring .c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
@@ -32,18 +38,27 @@ button{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(
 .lvl{display:inline-block;margin-top:10px;padding:4px 20px;border-radius:99px;background:var(--lv,var(--mut));color:#fff;font-weight:700}
 .msg{margin:8px 0 0;color:var(--mut);font-size:.9rem}
 .alarm{animation:p 1s infinite}
-@keyframes p{50%{box-shadow:0 0 0 10px rgba(239,68,68,.25)}}
-.g{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
-.m{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:14px 6px;text-align:center}
-.ic{width:44px;height:44px;border-radius:50%;margin:0 auto 6px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;background:rgba(139,92,246,.2)}
-.m b{display:block;font-size:1.15rem;direction:ltr;unicode-bidi:isolate}
-.m span{font-size:.75rem;color:var(--mut)}
-.card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-bottom:12px}
-h2{font-size:.95rem;margin:0 0 8px}
+@keyframes p{50%{box-shadow:0 0 0 10px rgba(231,74,59,.25)}}
+.g{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:600px){.g{grid-template-columns:repeat(3,1fr)}}
+.sc{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0}
+.sc>div:first-child{flex:1}
+.lab{font-size:.74rem;font-weight:800;color:var(--sc,var(--ac))}
+.sc b{display:block;font-size:1.5rem;line-height:1.3}
+.ic{font-size:1.9rem}
+.pb{height:8px;background:var(--bd);border-radius:9px;margin-top:6px;overflow:hidden}
+.pb i{display:block;height:100%;width:0;border-radius:9px;transition:width .6s}
+.tips{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tip{background:rgba(78,115,223,.07);border:2px solid var(--bd);border-radius:14px;padding:12px 8px;text-align:center;font-size:.8rem;line-height:1.45}
+.tip i{display:block;font-style:normal;font-size:2.3rem;line-height:1.2;margin-bottom:4px}
+.tip.o{border-color:var(--ok)}.tip.w{border-color:var(--warn)}.tip.b{border-color:var(--bad)}
 .spark{width:100%;height:90px}
 .leg{display:flex;flex-direction:column;gap:6px;font-size:.85rem}
-.leg div{display:flex;align-items:center;gap:8px}
-.leg i{width:14px;height:14px;border-radius:5px;flex:none}
+.leg div,.li{display:flex;align-items:flex-start;gap:10px;font-size:.88rem;margin-bottom:6px}
+.leg i.k,.chip{width:14px;height:14px;border-radius:5px;flex:none;margin-top:5px;display:block}
+.li>i{font-style:normal;font-size:1.3rem;line-height:1.4}
+.hero2{text-align:center}
+.hero2 svg{width:100%;max-width:260px}
 footer{text-align:center;color:var(--mut);font-size:.75rem;padding:6px 0 16px}
 </style>
 </head>
@@ -60,9 +75,12 @@ footer{text-align:center;color:var(--mut);font-size:.75rem;padding:6px 0 16px}
 <div class="btns"><button id="lang">EN</button><button id="th">◐</button></div>
 </div>
 
-<div class="st"><span class="dot" id="dot"></span><span id="upd">—</span></div>
+<div class="tabs"><button id="tb1" class="on">—</button><button id="tb2">—</button></div>
 
-<div class="hero" id="hero">
+<div id="p1">
+<div class="card st"><span class="dot" id="dot"></span><span id="upd">—</span></div>
+
+<div class="card hero" id="hero">
 <div class="ring">
 <svg viewBox="0 0 200 200" aria-hidden="true">
 <circle cx="100" cy="100" r="80" fill="none" stroke="var(--bd)" stroke-width="14"/>
@@ -74,72 +92,133 @@ footer{text-align:center;color:var(--mut);font-size:.75rem;padding:6px 0 16px}
 <p class="msg" id="msg">—</p>
 </div>
 
-<div class="g">
-<div class="m"><div class="ic">🌡️</div><b id="tp">—</b><span id="lt">—</span></div>
-<div class="m"><div class="ic">💧</div><b id="hu">—</b><span id="lh">—</span></div>
-<div class="m"><div class="ic">🧭</div><b id="pr">—</b><span id="lp">—</span></div>
+<div class="g" style="margin-bottom:12px">
+<div class="card ib sc" id="c1"><div><span class="lab" id="lt">—</span><b><bdi dir="ltr" id="tp">—</bdi></b><div class="pb"><i id="b1"></i></div></div><div class="ic">🌡️</div></div>
+<div class="card ib sc" id="c2"><div><span class="lab" id="lh">—</span><b><bdi dir="ltr" id="hu">—</bdi></b><div class="pb"><i id="b2"></i></div></div><div class="ic">💧</div></div>
+<div class="card ib sc" id="c3"><div><span class="lab" id="lp">—</span><b><bdi dir="ltr" id="pr">—</bdi></b><div class="pb"><i id="b3"></i></div></div><div class="ic">🧭</div></div>
 </div>
 
+<div class="card"><h2 id="hk">—</h2><div class="tips" id="tips"></div></div>
+
 <div class="card"><h2 id="hh">—</h2>
-<svg class="spark" viewBox="0 0 200 60" preserveAspectRatio="none"><line x1="0" y1="35" x2="200" y2="35" stroke="var(--warn)" stroke-dasharray="3 3" stroke-width=".7"/><line x1="0" y1="20" x2="200" y2="20" stroke="var(--bad)" stroke-dasharray="3 3" stroke-width=".7"/><polygon id="sa" fill="var(--ac)" opacity=".18" points=""/><polyline id="sp" fill="none" stroke="var(--ac)" stroke-width="2" stroke-linejoin="round" points=""/></svg>
+<svg class="spark" viewBox="0 0 200 60" preserveAspectRatio="none"><line x1="0" y1="35" x2="200" y2="35" stroke="var(--warn)" stroke-dasharray="3 3" stroke-width=".7"/><line x1="0" y1="20" x2="200" y2="20" stroke="var(--bad)" stroke-dasharray="3 3" stroke-width=".7"/><polygon id="sa" fill="var(--ac)" opacity=".15" points=""/><polyline id="sp" fill="none" stroke="var(--ac)" stroke-width="2" stroke-linejoin="round" points=""/></svg>
 </div>
 
 <div class="card"><h2 id="hl">—</h2><div class="leg" id="leg"></div></div>
+</div>
+
+<div id="p2" style="display:none"><div id="info"></div></div>
+
 <footer id="ft">—</footer>
 </div>
 
 <script>
 var DB="https://ultraviolet-rays-default-rtdb.firebaseio.com";
 var T={
-ar:{ou:"الجامعة الوطنية للعلوم والتكنولوجيا",oc:"الكلية التقنية الهندسية",od:"قسم هندسة تقنيات الأجهزة الطبية",t:"قياس الأشعة فوق البنفسجية",st:"قياس مباشر للأشعة والحرارة والرطوبة والضغط",lt:"الحرارة",lh:"الرطوبة",lp:"الضغط",hh:"سجل الأشعة (آخر القراءات)",hl:"مستويات التنبيه",ft:"مشروع تخرج",
+ar:{ou:"الجامعة الوطنية للعلوم والتكنولوجيا",oc:"الكلية التقنية الهندسية",od:"قسم هندسة تقنيات الأجهزة الطبية",t:"قياس الأشعة فوق البنفسجية",st:"قياس مباشر للأشعة والحرارة والرطوبة والضغط",tb1:"القراءات المباشرة",tb2:"عن الأشعة",lt:"الحرارة",lh:"الرطوبة",lp:"الضغط الجوي",hh:"سجل الأشعة (آخر القراءات)",hl:"مستويات التنبيه",hk:"نصائح حسب القراءات الحالية",ft:"مشروع تخرج",
 wait:"بانتظار أول قراءة من الجهاز",err:"تعذر الاتصال بالسيرفر",on:"الجهاز متصل",off:"الجهاز غير متصل، هذه آخر قراءة",w:"بانتظار البيانات",
 lv:["آمن","تنبيه","إنذار"],
 ms:["الأشعة منخفضة، لا حاجة لأي حماية.","استخدم واقي الشمس وغطِّ جسمك!","خطر! ابتعد عن الشمس فوراً."],
 lg:["أقل من 3: آمن","من 3 إلى 5: تنبيه (تحذير على الشاشة + صافرة)","5 فأكثر: إنذار (صافرة متكررة)"],
 ago:function(s){var m=Math.floor(s/60);return s<60?"قبل لحظات":m<60?"قبل "+m+" دقيقة":m<1440?"قبل "+Math.floor(m/60)+" ساعة":"قبل "+Math.floor(m/1440)+" يوم"}},
-en:{ou:"National University of Science and Technology",oc:"College of Engineering Technology",od:"Medical Devices Technologies Engineering Dept.",t:"UV Radiation Monitor",st:"Live UV, temperature, humidity and pressure",lt:"Temp",lh:"Humidity",lp:"Pressure",hh:"UV history (latest readings)",hl:"Alert levels",ft:"Graduation project",
+en:{ou:"National University of Science and Technology",oc:"College of Engineering Technology",od:"Medical Devices Technologies Engineering Dept.",t:"UV Radiation Monitor",st:"Live UV, temperature, humidity and pressure",tb1:"Live readings",tb2:"About UV",lt:"TEMPERATURE",lh:"HUMIDITY",lp:"PRESSURE",hh:"UV history (latest readings)",hl:"Alert levels",hk:"Tips based on current readings",ft:"Graduation project",
 wait:"Waiting for the first reading from the device",err:"Cannot reach the server",on:"Device online",off:"Device offline, showing last reading",w:"Waiting for data",
 lv:["Safe","Warning","ALARM"],
 ms:["UV is low, no protection needed.","Cover up and use sunscreen!","Danger! Get out of the sun now."],
 lg:["Below 3: Safe","3 to 5: Warning (screen alert + buzzer)","5 and above: Alarm (repeating buzzer)"],
 ago:function(s){var m=Math.floor(s/60);return s<60?"just now":m<60?m+" min ago":m<1440?Math.floor(m/60)+" h ago":Math.floor(m/1440)+" d ago"}}};
+T.ar.lt="الحرارة";T.ar.lh="الرطوبة";
+var I={
+ar:{what:["ما هي الأشعة فوق البنفسجية؟","أشعة غير مرئية تصدر من الشمس، طولها الموجي بين 100 و400 نانومتر، أقصر من الضوء المرئي. لا نراها ولا نشعر بها، وقد تضرنا حتى لو كان الجو غائماً أو بارداً."],
+types:[["UVA","الأطول موجة، وهي أغلب ما يصل إلى سطح الأرض. تخترق الجلد بعمق وتسبب الشيخوخة المبكرة والتجاعيد.","#f6c23e"],["UVB","تصل منها نسبة قليلة، وتسبب حروق الشمس وسرطان الجلد، وهي أيضاً المصدر الرئيسي لتكوين فيتامين د بالجسم.","#fd7e14"],["UVC","الأخطر والأقصر موجة، لكن الغلاف الجوي يمتصها ولا تصل إلى الأرض. تُنتج صناعياً لأغراض التعقيم.","#8b5cf6"]],
+ben:["فوائدها",[["☀️","تساعد الجلد على تكوين فيتامين د المهم للعظام والمناعة."],["🩺","تُستخدم بالعلاج الضوئي لبعض الأمراض الجلدية مثل الصدفية والبهاق."],["🧪","تقتل الجراثيم والفيروسات، ولهذا تُستخدم بتعقيم الأدوات والهواء والماء."]]],
+harm:["أضرارها",[["🔥","حروق الشمس واحمرار الجلد."],["👵","الشيخوخة المبكرة للجلد والتجاعيد والبقع."],["⚠️","زيادة خطر الإصابة بسرطان الجلد مع التعرض الطويل."],["👁️","أذى العين: التهاب القرنية وإعتام العدسة (الماء الأبيض)."],["🛡️","إضعاف مؤقت لمناعة الجلد."]]],
+med:["ارتباطها بالأجهزة الطبية","في هندسة تقنيات الأجهزة الطبية تظهر الأشعة فوق البنفسجية بأجهزة العلاج الضوئي (Phototherapy)، وأجهزة تعقيم الأدوات والغرف، وبحساسات UV التي تقيس الجرعة وتحمي المرضى والعاملين. ومشروعنا يستخدم حساس UV لقياس الشدة وتنبيه الناس."],
+sc:["مؤشر الأشعة فوق البنفسجية (WHO)",[["#1cc88a","0 - 2","منخفض"],["#f6c23e","3 - 5","متوسط"],["#fd7e14","6 - 7","مرتفع"],["#e74a3b","8 - 10","مرتفع جداً"],["#8b5cf6","11 فأكثر","شديد"]],"جهازنا يطلق التنبيه عند 3 والإنذار عند 5، وهذه حدود المشروع."],
+fx:["معلومات مفيدة",[["☁️","الغيوم لا توقف الأشعة بالكامل، فقد يبقى جزء كبير منها."],["🌡️","الأشعة ليست حرارة: قد يكون الجو بارداً والمؤشر مرتفعاً."],["🏖️","الماء والرمل والثلج تعكس الأشعة وتزيد التعرض."],["🕙","الذروة تكون بين 10 صباحاً و4 عصراً."],["🧴","يُعاد وضع واقي الشمس كل ساعتين تقريباً."]]],
+nt:"معلومات توعوية عامة وليست نصيحة طبية."},
+en:{what:["What is ultraviolet radiation?","Invisible rays from the sun with wavelengths between 100 and 400 nm, shorter than visible light. We cannot see or feel them, and they can harm us even on cloudy or cool days."],
+types:[["UVA","The longest wavelength and most of the UV reaching the ground. It penetrates deep into the skin and causes early aging and wrinkles.","#f6c23e"],["UVB","A smaller share reaches us. It causes sunburn and skin cancer, and it is also the main source of vitamin D in the body.","#fd7e14"],["UVC","The most dangerous and shortest, but the atmosphere absorbs it so it does not reach the ground. It is produced artificially for sterilization.","#8b5cf6"]],
+ben:["Benefits",[["☀️","Helps the skin make vitamin D, important for bones and immunity."],["🩺","Used in phototherapy for some skin diseases such as psoriasis and vitiligo."],["🧪","Kills germs and viruses, so it is used to sterilize tools, air and water."]]],
+harm:["Harms",[["🔥","Sunburn and red skin."],["👵","Early skin aging, wrinkles and spots."],["⚠️","Higher risk of skin cancer after long exposure."],["👁️","Eye damage: corneal inflammation and cataracts."],["🛡️","Temporary weakening of the skin's immunity."]]],
+med:["Link to medical devices","In medical devices technology, UV appears in phototherapy devices, tool and room sterilizers, and UV sensors that measure dose and protect patients and staff. Our project uses a UV sensor to measure intensity and warn people."],
+sc:["UV Index (WHO)",[["#1cc88a","0 - 2","Low"],["#f6c23e","3 - 5","Moderate"],["#fd7e14","6 - 7","High"],["#e74a3b","8 - 10","Very high"],["#8b5cf6","11+","Extreme"]],"Our device warns at 3 and sets off the alarm at 5. These are the project's limits."],
+fx:["Good to know",[["☁️","Clouds do not block UV completely; a large part can still pass."],["🌡️","UV is not heat: it can be cool and the index still high."],["🏖️","Water, sand and snow reflect UV and increase exposure."],["🕙","The peak is between 10 am and 4 pm."],["🧴","Reapply sunscreen about every 2 hours."]]],
+nt:"General awareness information, not medical advice."}};
+var TP=[
+{c:function(d){return d.uv<3},i:"😎",k:"o",ar:"الأشعة منخفضة، لا حاجة لحماية خاصة",en:"UV is low, no special protection needed"},
+{c:function(d){return d.uv>=5},i:"🏠",k:"b",ar:"تجنب الخروج وقت الذروة (10 صباحاً - 4 عصراً)",en:"Avoid going out at peak hours (10 am - 4 pm)"},
+{c:function(d){return d.uv>=5},i:"👕",k:"b",ar:"البس ملابس بأكمام طويلة",en:"Wear long-sleeved clothes"},
+{c:function(d){return d.uv>=3},i:"🧴",k:"w",ar:"ضع واقي الشمس SPF 30 أو أكثر",en:"Apply SPF 30+ sunscreen"},
+{c:function(d){return d.uv>=3},i:"🕶️",k:"w",ar:"البس نظارة شمسية",en:"Wear sunglasses"},
+{c:function(d){return d.uv>=3},i:"🧢",k:"w",ar:"غطِّ رأسك بقبعة",en:"Cover your head with a hat"},
+{c:function(d){return d.uv>=3},i:"🌳",k:"w",ar:"ابقَ بالظل قدر الإمكان",en:"Stay in the shade when possible"},
+{c:function(d){return d.temp!=null&&d.temp>=42},i:"🥵",k:"b",ar:"خطر ضربة شمس: استرح بمكان بارد فوراً",en:"Heatstroke risk: rest somewhere cool now"},
+{c:function(d){return d.temp!=null&&d.temp>=35},i:"💧",k:"w",ar:"اشرب ماءً بكثرة",en:"Drink plenty of water"},
+{c:function(d){return d.temp!=null&&d.temp>=35},i:"❄️",k:"w",ar:"ابقَ بمكان بارد أو مكيّف",en:"Stay somewhere cool or air-conditioned"},
+{c:function(d){return d.hum!=null&&d.hum>=70},i:"💦",k:"w",ar:"رطوبة عالية: الجسم يبرد ببطء، خذ استراحات",en:"High humidity: the body cools slowly, take breaks"},
+{c:function(d){return d.hum!=null&&d.hum<=25},i:"🌵",k:"w",ar:"هواء جاف: رطّب بشرتك واشرب ماء",en:"Dry air: moisturize your skin and drink water"}];
 var L="ar",d=null,h=[],bad=false,C=["--ok","--warn","--bad"];
 function $(i){return document.getElementById(i)}
 function lv(v){return v>=5?2:v>=3?1:0}
+function pb(n,pct,c){$("b"+n).style.width=Math.max(0,Math.min(100,pct))+"%";$("b"+n).style.background="var("+c+")";$("c"+n).style.setProperty("--sc","var("+c+")")}
 function draw(){
 var s=T[L],r=document.documentElement;
 r.lang=L;r.dir=L=="ar"?"rtl":"ltr";
 $("lang").textContent=L=="ar"?"EN":"ع";
-["ou","oc","od","lt","lh","lp","hh","hl","ft"].forEach(function(i){$(i).textContent=s[i]});
+["ou","oc","od","lt","lh","lp","hh","hl","ft","tb1","tb2"].forEach(function(i){$(i).textContent=s[i]});
 $("t").childNodes[0].nodeValue=s.t;$("st").textContent=s.st;
 var has=!!d&&typeof d.uv=="number",k=has?lv(d.uv):-1;
 var on=has&&d.ts&&(Date.now()-d.ts)<300000;
 $("hero").style.setProperty("--lv","var("+(k<0?"--mut":C[k])+")");
-$("hero").className="hero"+(k==2&&on?" alarm":"");
+$("hero").className="card hero"+(k==2&&on?" alarm":"");
 $("uv").textContent=has?d.uv.toFixed(1):"--";
 $("lvl").textContent=k<0?s.w:s.lv[k];
 $("msg").textContent=k<0?"":s.ms[k];
 $("arc").style.strokeDashoffset=has?502.65*(1-Math.min(d.uv,11)/11):502.65;
-$("tp").textContent=has&&d.temp!=null?Number(d.temp).toFixed(1)+"°C":"—";
-$("hu").textContent=has&&d.hum!=null?Math.round(d.hum)+"%":"—";
-$("pr").textContent=has&&d.press!=null?Math.round(d.press)+" hPa":"—";
+var ht=has&&d.temp!=null,hh=has&&d.hum!=null,hp=has&&d.press!=null;
+$("tp").textContent=ht?Number(d.temp).toFixed(1)+"°C":"—";
+$("hu").textContent=hh?Math.round(d.hum)+"%":"—";
+$("pr").textContent=hp?Math.round(d.press)+" hPa":"—";
+pb(1,ht?d.temp*2:0,!ht?"--mut":d.temp>=42?"--bad":d.temp>=35?"--warn":"--ok");
+pb(2,hh?d.hum:0,!hh?"--mut":(d.hum>=70||d.hum<=25)?"--warn":"--ok");
+pb(3,hp?(d.press-950):0,hp?"--ac":"--mut");
 $("upd").textContent=bad?s.err:!has?s.wait:(on?s.on:s.off)+(d.ts?" • "+s.ago((Date.now()-d.ts)/1000):"");
 $("dot").style.background=on?"var(--ok)":"var(--mut)";
-$("leg").innerHTML=s.lg.map(function(x,i){return '<div><i style="background:var('+C[i]+')"></i>'+x+'</div>'}).join("");
+$("leg").innerHTML=s.lg.map(function(x,i){return '<div><i class="k" style="background:var('+C[i]+')"></i>'+x+'</div>'}).join("");
+var tl=has?TP.filter(function(t){return t.c(d)}):[];
+tl.sort(function(a,b){return "bwo".indexOf(a.k)-"bwo".indexOf(b.k)});
+$("hk").textContent=s.hk;
+$("tips").innerHTML=tl.length?tl.map(function(t){return '<div class="tip '+t.k+'"><i>'+t.i+'</i>'+t[L]+'</div>'}).join(""):'<div class="msg">'+s.w+'</div>';
 var a=h.length?h:(has?[d.uv,d.uv]:[]);
 if(a.length==1)a=[a[0],a[0]];
 var p=a.map(function(v,i){return (i*200/(a.length-1)).toFixed(1)+","+(58-Math.min(v,11)/11*54).toFixed(1)}).join(" ");
 $("sp").setAttribute("points",p);
 $("sa").setAttribute("points",a.length?p+" 200,60 0,60":"");
 }
+function sec(t,c,b){return '<div class="card ib" style="--sc:'+c+'"><h2>'+t+'</h2>'+b+'</div>'}
+function li(a){return a.map(function(x){return '<div class="li"><i>'+x[0]+'</i><span>'+x[1]+'</span></div>'}).join("")}
+var ART='<svg viewBox="0 0 200 110" aria-hidden="true"><circle cx="168" cy="26" r="14" fill="#f6c23e"/><g stroke="#f6c23e" stroke-width="3" stroke-linecap="round"><path d="M168 4v6M168 42v6M146 26h6M184 26h6M152 10l4 4M180 38l4 4M184 10l-4 4M156 38l-4 4"/></g><path d="M38 58a46 46 0 0 1 92 0z" fill="#4e73df"/><path d="M84 58v38" stroke="#1f2a44" stroke-width="3" stroke-linecap="round"/><circle cx="100" cy="68" r="7" fill="#fd7e14"/><path d="M100 76v16M100 82l-8 7M100 82l8 7M100 92l-6 12M100 92l6 12" stroke="#fd7e14" stroke-width="3.5" stroke-linecap="round" fill="none"/><path d="M10 106h180" stroke="var(--bd)" stroke-width="3" stroke-linecap="round"/></svg>';
+function info(){var s=I[L];
+$("info").innerHTML='<div class="card hero2">'+ART+'<h2>'+s.what[0]+'</h2><p class="msg">'+s.what[1]+'</p></div>'
++s.types.map(function(x){return sec(x[0],x[2],'<p class="msg" style="margin:0">'+x[1]+'</p>')}).join("")
++sec(s.ben[0],"var(--ok)",li(s.ben[1]))
++sec(s.harm[0],"var(--bad)",li(s.harm[1]))
++sec(s.med[0],"var(--ac)",'<p class="msg" style="margin:0">'+s.med[1]+'</p>')
++sec(s.sc[0],"var(--warn)",s.sc[1].map(function(x){return '<div class="li"><i class="chip" style="background:'+x[0]+'"></i><span><b>'+x[1]+'</b> &nbsp;'+x[2]+'</span></div>'}).join("")+'<p class="msg">'+s.sc[2]+'</p>')
++sec(s.fx[0],"#36b9cc",li(s.fx[1]))
++'<p class="msg" style="text-align:center">'+s.nt+'</p>';
+}
+function tab(n){$("p1").style.display=n==1?"block":"none";$("p2").style.display=n==2?"block":"none";$("tb1").className=n==1?"on":"";$("tb2").className=n==2?"on":"";window.scrollTo(0,0)}
 function load(){
 fetch(DB+"/uv.json",{cache:"no-store"}).then(function(r){return r.json()}).then(function(j){d=j;bad=false;
 return fetch(DB+"/history.json?orderBy="+encodeURIComponent('"$key"')+"&limitToLast=20",{cache:"no-store"})}).then(function(r){return r.json()}).then(function(o){
 h=o?Object.keys(o).sort().map(function(k){return o[k].uv}):[];draw()}).catch(function(){bad=true;draw()});
 }
-$("lang").onclick=function(){L=L=="ar"?"en":"ar";draw()};
-$("th").onclick=function(){var r=document.documentElement;r.setAttribute("data-theme",r.getAttribute("data-theme")=="light"?"dark":"light")};
-draw();load();setInterval(load,5000);
+$("tb1").onclick=function(){tab(1)};$("tb2").onclick=function(){tab(2)};
+$("lang").onclick=function(){L=L=="ar"?"en":"ar";draw();info()};
+$("th").onclick=function(){var r=document.documentElement;r.setAttribute("data-theme",r.getAttribute("data-theme")=="dark"?"light":"dark")};
+draw();info();load();setInterval(load,5000);
 </script>
 </body>
 </html>
